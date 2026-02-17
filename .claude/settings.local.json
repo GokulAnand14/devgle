@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add -A)",
+      "Bash(git commit -m \"feat: initial commit to devgle repository\")",
+      "Bash(gh repo create devgle --private -y --source=. --remote=origin --push)"
+    ]
+  }
+}
