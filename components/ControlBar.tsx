@@ -10,7 +10,9 @@ import {
     PhoneOff,
     MoreHorizontal,
     ChevronUp,
-    ChevronDown
+    ChevronDown,
+    Settings,
+    Github
 } from "lucide-react";
 
 interface ControlBarProps {
@@ -24,6 +26,12 @@ interface ControlBarProps {
     onToggleChat: () => void;
     onSkip: () => void;
     onEndCall: () => void;
+    // New Props for Device Switching
+    imgSrc?: string; // Unused but kept for interface compat if needed
+    devices?: MediaDeviceInfo[];
+    selectedAudioDeviceId?: string;
+    selectedVideoDeviceId?: string;
+    onSwitchDevice?: (kind: 'audio' | 'video', deviceId: string) => void;
 }
 
 export default function ControlBar({
@@ -37,11 +45,20 @@ export default function ControlBar({
     onToggleChat,
     onSkip,
     onEndCall,
+    devices = [],
+    selectedAudioDeviceId,
+    selectedVideoDeviceId,
+    onSwitchDevice
 }: ControlBarProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [showMoreMenu, setShowMoreMenu] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const settingsRef = useRef<HTMLDivElement>(null);
+
+    const audioDevices = devices.filter(d => d.kind === 'audioinput');
+    const videoDevices = devices.filter(d => d.kind === 'videoinput');
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 640);
@@ -52,6 +69,9 @@ export default function ControlBar({
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setShowMoreMenu(false);
             }
+            if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+                setShowSettings(false);
+            }
         };
         document.addEventListener('mousedown', handleClickOutside);
 
@@ -60,6 +80,82 @@ export default function ControlBar({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // --- Sub-Components ---
+    const SettingsModal = () => (
+        <div
+            ref={settingsRef}
+            className="settings-modal paper-stack"
+            style={{
+                position: 'absolute',
+                bottom: '120%',
+                right: 0,
+                width: 300,
+                background: 'white',
+                border: 'var(--border-thick)',
+                padding: 16,
+                zIndex: 'var(--z-tooltip)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 16
+            }}
+        >
+            <h3 style={{ fontSize: '1rem', fontWeight: 800, textTransform: 'uppercase', borderBottom: 'var(--border-thin)', paddingBottom: 8 }}>Device Settings</h3>
+
+            {/* Audio Selection */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Mic size={14} /> Microphone
+                </label>
+                <select
+                    value={selectedAudioDeviceId}
+                    onChange={(e) => onSwitchDevice?.('audio', e.target.value)}
+                    style={{
+                        padding: 8,
+                        border: 'var(--border-thin)',
+                        borderRadius: 4,
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        background: 'var(--bg-secondary)',
+                        cursor: 'pointer'
+                    }}
+                >
+                    {audioDevices.map(device => (
+                        <option key={device.deviceId} value={device.deviceId}>
+                            {device.label || `Microphone ${device.deviceId.slice(0, 5)}...`}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Video Selection */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <VideoIcon size={14} /> Camera
+                </label>
+                <select
+                    value={selectedVideoDeviceId}
+                    onChange={(e) => onSwitchDevice?.('video', e.target.value)}
+                    style={{
+                        padding: 8,
+                        border: 'var(--border-thin)',
+                        borderRadius: 4,
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        background: 'var(--bg-secondary)',
+                        cursor: 'pointer'
+                    }}
+                >
+                    {videoDevices.map(device => (
+                        <option key={device.deviceId} value={device.deviceId}>
+                            {device.label || `Camera ${device.deviceId.slice(0, 5)}...`}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        </div>
+    );
+
 
     // Common Buttons
     const MicBtn = (
