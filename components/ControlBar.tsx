@@ -86,6 +86,8 @@ export default function ControlBar({
         <div
             ref={settingsRef}
             className="settings-modal paper-stack"
+            onMouseDown={(e) => e.nativeEvent.stopImmediatePropagation()}
+            onClick={(e) => e.stopPropagation()}
             style={{
                 position: 'absolute',
                 bottom: '120%',
@@ -97,7 +99,8 @@ export default function ControlBar({
                 zIndex: 'var(--z-tooltip)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 16
+                gap: 16,
+                cursor: 'default'
             }}
         >
             <h3 style={{ fontSize: '1rem', fontWeight: 800, textTransform: 'uppercase', borderBottom: 'var(--border-thin)', paddingBottom: 8 }}>Device Settings</h3>
@@ -108,8 +111,11 @@ export default function ControlBar({
                     <Mic size={14} /> Microphone
                 </label>
                 <select
-                    value={selectedAudioDeviceId}
-                    onChange={(e) => onSwitchDevice?.('audio', e.target.value)}
+                    value={selectedAudioDeviceId || ""}
+                    onChange={(e) => {
+                        console.log("Switching Audio:", e.target.value);
+                        onSwitchDevice?.('audio', e.target.value);
+                    }}
                     style={{
                         padding: 8,
                         border: 'var(--border-thin)',
@@ -117,7 +123,8 @@ export default function ControlBar({
                         fontWeight: 600,
                         fontSize: '0.9rem',
                         background: 'var(--bg-secondary)',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        color: 'black'
                     }}
                 >
                     {audioDevices.map(device => (
@@ -134,8 +141,11 @@ export default function ControlBar({
                     <VideoIcon size={14} /> Camera
                 </label>
                 <select
-                    value={selectedVideoDeviceId}
-                    onChange={(e) => onSwitchDevice?.('video', e.target.value)}
+                    value={selectedVideoDeviceId || ""}
+                    onChange={(e) => {
+                        console.log("Switching Video:", e.target.value);
+                        onSwitchDevice?.('video', e.target.value);
+                    }}
                     style={{
                         padding: 8,
                         border: 'var(--border-thin)',
@@ -143,7 +153,8 @@ export default function ControlBar({
                         fontWeight: 600,
                         fontSize: '0.9rem',
                         background: 'var(--bg-secondary)',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        color: 'black'
                     }}
                 >
                     {videoDevices.map(device => (
