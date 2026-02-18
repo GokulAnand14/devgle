@@ -21,25 +21,78 @@ export function useMediaStream() {
         error: null,
     });
 
+    const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+    const [selectedVideoInfo, setSelectedVideoInfo] = useState<string | undefined>(undefined);
+    const [selectedAudioInfo, setSelectedAudioInfo] = useState<string | undefined>(undefined);
+
     const streamRef = useRef<MediaStream | null>(null);
     const screenStreamRef = useRef<MediaStream | null>(null);
 
-    const startMedia = useCallback(async () => {
+    useEffect(() => {
+        // Enumerate devices
+        const getDevices = async () => {
+            try {
+                // Check if we have permission first by requesting it if stream is null? 
+                // devicechange event might not fire if no permission.
+                // But usually we call getDevices after permission is granted in startMedia.
+                // Let's call it here anyway.
+                const devs = await navigator.mediaDevices.enumerateDevices();
+                setDevices(devs);
+            } catch (error) {
+                console.error("Error enumerating devices:", error);
+            }
+        };
+
+        getDevices();
+        navigator.mediaDevices.addEventListener('devicechange', getDevices);
+        return () => {
+            navigator.mediaDevices.removeEventListener('devicechange', getDevices);
+        };
+    }, []);
+
+    const startMedia = useCallback(async (audioDeviceId?: string, videoDeviceId?: string) => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({
+            // Stop existing tracks first
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach((track) => track.stop());
+            }
+
+            const constraints: MediaStreamConstraints = {
                 video: {
+                    deviceId: videoDeviceId ? { exact: videoDeviceId } : undefined,
                     width: { ideal: 1280 },
                     height: { ideal: 720 },
-                    facingMode: "user",
+                    facingMode: videoDeviceId ? undefined : "user",
                 },
                 audio: {
+                    deviceId: audioDeviceId ? { exact: audioDeviceId } : undefined,
                     echoCancellation: true,
                     noiseSuppression: true,
                     autoGainControl: true,
                 },
-            });
+            };
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
             streamRef.current = stream;
-            setState((prev) => ({ ...prev, stream, error: null }));
+
+            // Update state and selected devices from the actual stream
+            const videoTrack = stream.getVideoTracks()[0];
+            const audioTrack = stream.getAudioTracks()[0];
+
+            if (videoTrack) setSelectedVideoInfo(videoTrack.getSettings().deviceId);
+            if (audioTrack) setSelectedAudioInfo(audioTrack.getSettings().deviceId);
+
+            // Refresh device list as permissions are now granted
+            const devs = await navigator.mediaDevices.enumerateDevices();
+            setDevices(devs);
+
+            setState((prev) => ({
+                ...prev,
+                stream,
+                error: null,
+                isAudioEnabled: audioTrack?.enabled ?? true,
+                isVideoEnabled: videoTrack?.enabled ?? true
+            }));
             return stream;
         } catch (err) {
             const error =
@@ -48,6 +101,16 @@ export function useMediaStream() {
             return null;
         }
     }, []);
+
+    const switchDevice = useCallback(async (kind: 'audio' | 'video', deviceId: string) => {
+        if (kind === 'audio') {
+            setSelectedAudioInfo(deviceId);
+            return startMedia(deviceId, selectedVideoInfo);
+        } else {
+            setSelectedVideoInfo(deviceId);
+            return startMedia(selectedAudioInfo, deviceId);
+        }
+    }, [startMedia, selectedAudioInfo, selectedVideoInfo]);
 
     const stopMedia = useCallback(() => {
         if (streamRef.current) {
@@ -106,7 +169,6 @@ export function useMediaStream() {
 
             screenStreamRef.current = screenStream;
 
-            // Handle user stopping screen share via browser UI
             screenStream.getVideoTracks()[0].onended = () => {
                 screenStreamRef.current = null;
                 setState((prev) => ({
@@ -153,7 +215,11 @@ export function useMediaStream() {
 
     return {
         ...state,
+        devices,
+        selectedAudioDeviceId: selectedAudioInfo,
+        selectedVideoDeviceId: selectedVideoInfo,
         startMedia,
+        switchDevice,
         stopMedia,
         toggleAudio,
         toggleVideo,
