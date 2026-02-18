@@ -2,7 +2,7 @@
 
 > **"Where Developers Connect, Anonymous & Distraction-Free."**
 
-![Devgle Banner](https://via.placeholder.com/1200x600?text=Devgle:+Developers+Assemble)
+![Devgle Preview](public/preview.webp)
 
 ## 🌟 Introduction
 
