@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Paper Shadow/Depth -->
+  <path d="M58 8 L18 58 L48 58 L38 98 L88 38 L58 38 Z" fill="#000000" opacity="1" />
+  
+  <!-- Main Bolt -->
+  <path d="M55 5 L15 55 L45 55 L35 95 L85 35 L55 35 Z" fill="#FACC15" stroke="black" stroke-width="4" stroke-linejoin="round" />
+</svg>

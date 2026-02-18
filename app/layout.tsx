@@ -19,6 +19,9 @@ export const metadata: Metadata = {
       "Connect anonymously with developers worldwide. Share your screen, get feedback, and build together.",
     type: "website",
   },
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
