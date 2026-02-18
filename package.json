@@ -1,6 +1,7 @@
 {
   "name": "devgle-v2",
   "version": "0.1.0",
+  "description": "Devgle: Anonymous, Decentralized, Open-Source Video Chat for Developers. Built with WebRTC & GunJS. No Database. No Login.",
   "private": true,
   "scripts": {
     "dev": "next dev",
