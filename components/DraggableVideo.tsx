@@ -94,7 +94,6 @@ export default function DraggableVideo({
                 width: isMinimized ? 'auto' : size.width,
                 height: isMinimized ? 32 : size.height,
                 minWidth: isMinimized ? 120 : 160,
-                minWidth: isMinimized ? 120 : 160,
                 zIndex: isDragging || isResizing ? 'var(--z-dragging)' : 'var(--z-floating)',
                 cursor: isDragging ? 'grabbing' : 'default',
                 background: isMinimized ? 'white' : 'var(--bg-primary)',

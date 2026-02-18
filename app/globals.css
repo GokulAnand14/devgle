@@ -913,10 +913,6 @@ body {
   /* Mobile Layout Adjustments (Paper Theme Preserved) */
 
   /* 1. Full Height Layout */
-  .room-layout {
-    /* height: 100dvh; */
-    /* Ensure background remains paper-colored */
-  }
 
   .room-main {
     height: 100dvh !important;
