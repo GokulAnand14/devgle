@@ -342,12 +342,13 @@ export default function RoomPage() {
         <div className="room-layout" style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'transparent' }}>
             <header className="room-header" style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 24px', height: 'var(--header-height)', borderBottom: 'var(--border-thick)', background: 'var(--bg-primary)' }}>
                 <div className="room-topbar-left">
+                    <Link href="/" className="logo-badge" style={{ textDecoration: 'none' }}>
                         <span className="bolt">⚡</span>
                         <span className="logo-text">Devgle</span>
                     </Link>
-                    <a 
-                        href="https://github.com/GokulAnand14/devgle" 
-                        target="_blank" 
+                    <a
+                        href="https://github.com/GokulAnand14/devgle"
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="desktop-only"
                         style={{ marginLeft: 24, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }}
@@ -370,175 +371,175 @@ export default function RoomPage() {
                 </div>
             </header >
 
-        <main className="room-main" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-            <div className="stage-ribbon-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+            <main className="room-main" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+                <div className="stage-ribbon-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
 
-                {/* STAGE AREA */}
-                <div className="stage-area" style={{ flex: 1, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-                    {stageStream ? (
-                        <div className="video-card paper-stack" style={{ width: '100%', height: '100%', maxWidth: 1200, maxHeight: '90%', background: 'black' }}>
-                            <VideoPlayer
-                                stream={stageStream}
-                                peerId={stagePeerId || 'unknown'}
-                                label={stageLabel}
-                                objectFit="contain"
-                            />
-                        </div>
-                    ) : (
-                        <div className="video-card paper-stack" style={{ width: '100%', height: '100%', maxWidth: 800, maxHeight: 600, background: 'var(--bg-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, border: 'var(--border-thick)' }}>
-                            <div style={{ transform: 'scale(1.5)', marginBottom: 32 }}>
-                                <UserAvatar peerId="waiting" size={80} />
+                    {/* STAGE AREA */}
+                    <div className="stage-area" style={{ flex: 1, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                        {stageStream ? (
+                            <div className="video-card paper-stack" style={{ width: '100%', height: '100%', maxWidth: 1200, maxHeight: '90%', background: 'black' }}>
+                                <VideoPlayer
+                                    stream={stageStream}
+                                    peerId={stagePeerId || 'unknown'}
+                                    label={stageLabel}
+                                    objectFit="contain"
+                                />
                             </div>
-                            <h2 style={{ fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: -1, textAlign: 'center' }}>
-                                Waiting for Peer...
-                            </h2>
-                            <p style={{ marginTop: 8, fontSize: '1.1rem', opacity: 0.6, fontWeight: 600 }}>The stage is empty.</p>
+                        ) : (
+                            <div className="video-card paper-stack" style={{ width: '100%', height: '100%', maxWidth: 800, maxHeight: 600, background: 'var(--bg-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, border: 'var(--border-thick)' }}>
+                                <div style={{ transform: 'scale(1.5)', marginBottom: 32 }}>
+                                    <UserAvatar peerId="waiting" size={80} />
+                                </div>
+                                <h2 style={{ fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: -1, textAlign: 'center' }}>
+                                    Waiting for Peer...
+                                </h2>
+                                <p style={{ marginTop: 8, fontSize: '1.1rem', opacity: 0.6, fontWeight: 600 }}>The stage is empty.</p>
+                            </div>
+                        )}
+
+                        {/* Tape Effect Decoration */}
+                        <div className="tape-effect" style={{ top: 20, right: '20%' }} />
+                    </div>
+
+                    {/* RIBBON AREA */}
+                    {ribbonStreams.length > 0 && (
+                        <div className="ribbon-area" style={{ height: 180, borderTop: 'var(--border-thick)', background: 'var(--bg-tertiary)', padding: 16, display: 'flex', gap: 16, overflowX: 'auto', flexShrink: 0 }}>
+                            {ribbonStreams.map((item, idx) => (
+                                <div key={idx} className="video-card" style={{ minWidth: 240, height: '100%', border: 'var(--border-thick)', boxShadow: 'var(--shadow-sm)', position: 'relative' }}>
+                                    <VideoPlayer
+                                        stream={item.stream}
+                                        peerId={item.peerId}
+                                        label={item.label}
+                                        isVideoOff={item.isVideoOff}
+                                        objectFit="cover"
+                                        muted={item.peerId === peerId} // Mute local
+                                        mirrored={item.peerId === peerId && !item.isScreen}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     )}
 
-                    {/* Tape Effect Decoration */}
-                    <div className="tape-effect" style={{ top: 20, right: '20%' }} />
+                    {/* Floating Control Bar (Over Stage) */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: ribbonStreams.length > 0 ? 196 : 32,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 100,
+                        transition: 'bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}>
+                        <ControlBar
+                            isMicOn={media.isAudioEnabled}
+                            isCamOn={media.isVideoEnabled}
+                            isScreenSharing={media.isScreenSharing}
+                            isChatOpen={isChatOpen}
+                            onToggleMic={media.toggleAudio}
+                            onToggleCam={media.toggleVideo}
+                            onToggleScreenShare={handleToggleScreenShare}
+                            onToggleChat={() => setIsChatOpen(!isChatOpen)}
+                            onSkip={handleSkip}
+                            onEndCall={handleEndCall}
+                            // Device Switching Props
+                            devices={media.devices}
+                            selectedAudioDeviceId={media.selectedAudioDeviceId}
+                            selectedVideoDeviceId={media.selectedVideoDeviceId}
+                            onSwitchDevice={media.switchDevice}
+                        />
+                    </div>
                 </div>
 
-                {/* RIBBON AREA */}
-                {ribbonStreams.length > 0 && (
-                    <div className="ribbon-area" style={{ height: 180, borderTop: 'var(--border-thick)', background: 'var(--bg-tertiary)', padding: 16, display: 'flex', gap: 16, overflowX: 'auto', flexShrink: 0 }}>
-                        {ribbonStreams.map((item, idx) => (
-                            <div key={idx} className="video-card" style={{ minWidth: 240, height: '100%', border: 'var(--border-thick)', boxShadow: 'var(--shadow-sm)', position: 'relative' }}>
-                                <VideoPlayer
-                                    stream={item.stream}
-                                    peerId={item.peerId}
-                                    label={item.label}
-                                    isVideoOff={item.isVideoOff}
-                                    objectFit="cover"
-                                    muted={item.peerId === peerId} // Mute local
-                                    mirrored={item.peerId === peerId && !item.isScreen}
-                                />
+                {/* Chat Panel (Docked on Desktop, Floating Window on Mobile) */}
+                <ChatPanel
+                    isOpen={isChatOpen}
+                    messages={chat.messages}
+                    onSend={chat.sendMessage}
+                    onClose={() => setIsChatOpen(false)}
+                    isConnected={webrtc.connectionState === "connected"}
+                    variant={isDesktop ? "docked" : "window"}
+                />
+            </main>
+
+            {/* Toast for closed chat */}
+            {
+                showChatToast && !isChatOpen && unreadMessage && (
+                    <div
+                        className="chat-toast"
+                        onClick={() => setIsChatOpen(true)}
+                        style={{
+                            position: 'fixed',
+                            bottom: 100, // Higher up to not block controls
+                            right: 20,
+                            zIndex: 1200,
+                            background: 'var(--text-primary)',
+                            color: 'white',
+                            padding: '12px 16px',
+                            borderRadius: 8,
+                            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 12,
+                            cursor: 'pointer',
+                            maxWidth: 'min(300px, 90vw)',
+                            border: '1px solid rgba(255,255,255,0.2)'
+                        }}
+                    >
+                        <div style={{
+                            background: 'var(--accent-green)',
+                            color: 'black',
+                            width: 32,
+                            height: 32,
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                        }}>
+                            <MessageSquare size={16} strokeWidth={3} />
+                        </div>
+                        <div style={{ overflow: 'hidden' }}>
+                            <div style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', opacity: 0.7, marginBottom: 2 }}>New Message</div>
+                            <div style={{ fontSize: '0.9rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {unreadMessage.text}
                             </div>
-                        ))}
+                        </div>
                     </div>
-                )}
+                )
+            }
 
-                {/* Floating Control Bar (Over Stage) */}
-                <div style={{
-                    position: 'absolute',
-                    bottom: ribbonStreams.length > 0 ? 196 : 32,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    zIndex: 100,
-                    transition: 'bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}>
-                    <ControlBar
-                        isMicOn={media.isAudioEnabled}
-                        isCamOn={media.isVideoEnabled}
-                        isScreenSharing={media.isScreenSharing}
-                        isChatOpen={isChatOpen}
-                        onToggleMic={media.toggleAudio}
-                        onToggleCam={media.toggleVideo}
-                        onToggleScreenShare={handleToggleScreenShare}
-                        onToggleChat={() => setIsChatOpen(!isChatOpen)}
-                        onSkip={handleSkip}
-                        onEndCall={handleEndCall}
-                        // Device Switching Props
-                        devices={media.devices}
-                        selectedAudioDeviceId={media.selectedAudioDeviceId}
-                        selectedVideoDeviceId={media.selectedVideoDeviceId}
-                        onSwitchDevice={media.switchDevice}
+            {/* Draggable Local Stream - Top Left */}
+            <DraggableVideo
+                stream={media.stream}
+                isMuted={true}
+                label="YOU"
+                isVideoOff={!media.isVideoEnabled}
+            // Default position in DraggableVideo is 20, 80. Leaving it as base.
+            />
+            {
+                media.isScreenSharing && (
+                    <DraggableVideo
+                        stream={media.screenStream}
+                        isScreen={true}
+                        label="YOUR SCREEN"
+                        // Position below local stream (80 + 180 + 20 = 280)
+                        initialPosition={{ x: 20, y: 280 }}
                     />
-                </div>
-            </div>
+                )
+            }
 
-            {/* Chat Panel (Docked on Desktop, Floating Window on Mobile) */}
-            <ChatPanel
-                isOpen={isChatOpen}
-                messages={chat.messages}
-                onSend={chat.sendMessage}
-                onClose={() => setIsChatOpen(false)}
-                isConnected={webrtc.connectionState === "connected"}
-                variant={isDesktop ? "docked" : "window"}
-            />
-        </main>
-
-    {/* Toast for closed chat */ }
-    {
-        showChatToast && !isChatOpen && unreadMessage && (
-            <div
-                className="chat-toast"
-                onClick={() => setIsChatOpen(true)}
-                style={{
-                    position: 'fixed',
-                    bottom: 100, // Higher up to not block controls
-                    right: 20,
-                    zIndex: 1200,
-                    background: 'var(--text-primary)',
-                    color: 'white',
-                    padding: '12px 16px',
-                    borderRadius: 8,
-                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 12,
-                    cursor: 'pointer',
-                    maxWidth: 'min(300px, 90vw)',
-                    border: '1px solid rgba(255,255,255,0.2)'
-                }}
-            >
-                <div style={{
-                    background: 'var(--accent-green)',
-                    color: 'black',
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                }}>
-                    <MessageSquare size={16} strokeWidth={3} />
-                </div>
-                <div style={{ overflow: 'hidden' }}>
-                    <div style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', opacity: 0.7, marginBottom: 2 }}>New Message</div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {unreadMessage.text}
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    {/* Draggable Local Stream - Top Left */ }
-    <DraggableVideo
-        stream={media.stream}
-        isMuted={true}
-        label="YOU"
-        isVideoOff={!media.isVideoEnabled}
-    // Default position in DraggableVideo is 20, 80. Leaving it as base.
-    />
-    {
-        media.isScreenSharing && (
-            <DraggableVideo
-                stream={media.screenStream}
-                isScreen={true}
-                label="YOUR SCREEN"
-                // Position below local stream (80 + 180 + 20 = 280)
-                initialPosition={{ x: 20, y: 280 }}
-            />
-        )
-    }
-
-    {/* Pop-out Remote Camera (when they are sharing screen) - Position below screen share */ }
-    {
-        popOutStream && (
-            <DraggableVideo
-                stream={popOutStream.stream}
-                peerId={popOutStream.peerId}
-                isMuted={false}
-                label={popOutStream.label}
-                isVideoOff={popOutStream.isVideoOff}
-                initialPosition={{ x: 20, y: 480 }}
-            />
-        )
-    }
+            {/* Pop-out Remote Camera (when they are sharing screen) - Position below screen share */}
+            {
+                popOutStream && (
+                    <DraggableVideo
+                        stream={popOutStream.stream}
+                        peerId={popOutStream.peerId}
+                        isMuted={false}
+                        label={popOutStream.label}
+                        isVideoOff={popOutStream.isVideoOff}
+                        initialPosition={{ x: 20, y: 480 }}
+                    />
+                )
+            }
         </div >
     );
 }
