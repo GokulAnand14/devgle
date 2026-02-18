@@ -10,6 +10,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import OnlineCounter from "@/components/OnlineCounter";
+import Navbar from "@/components/Navbar";
 
 const features = [
   {
@@ -68,21 +69,7 @@ export default function Home() {
       <div className="grid-bg" />
 
       {/* Navbar */}
-      <nav className="navbar" style={{ padding: '24px 0' }}>
-        <Link href="/" className="logo-badge">
-          <span className="bolt">⚡</span>
-          <span className="logo-text">Devgle</span>
-        </Link>
-        <div className="navbar-links">
-          <a href="#features" style={{ fontWeight: 800, textTransform: 'uppercase' }}>Features</a>
-          <a href="#how-it-works" style={{ fontWeight: 800, textTransform: 'uppercase' }}>How it works</a>
-        </div>
-        <div className="navbar-cta">
-          <Link href="/room" className="btn btn-primary btn-sm" style={{ paddingRight: '20px' }}>
-            Launch App <ArrowRight size={16} style={{ marginLeft: 8 }} />
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="hero">

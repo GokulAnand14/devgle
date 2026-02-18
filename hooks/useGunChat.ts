@@ -62,13 +62,30 @@ export function useGunChat(roomId: string | null, localPeerId: string) {
 
             if (!mounted) return;
 
+            console.log(`[Chat] Joining room: ${roomId}-chat as ${localPeerId}`);
             const room = joinRoom({ appId: APP_ID }, `${roomId}-chat`);
             roomRef.current = room;
 
             const [sendMsg, getMsg] = room.makeAction("chat");
             sendMsgRef.current = sendMsg;
 
+            room.onPeerJoin((peerId) => {
+                console.log(`[Chat] Peer joined: ${peerId}`);
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: `sys_${Date.now()}`,
+                        text: `System: Connected to peer ${peerId.slice(0, 6)}`,
+                        from: "system",
+                        timestamp: Date.now(),
+                        isMine: false,
+                    }
+                ]);
+            });
+            room.onPeerLeave((peerId) => console.log(`[Chat] Peer left: ${peerId}`));
+
             getMsg((data: any) => {
+                console.log("[Chat] Received message:", data);
                 if (!data || !data.id || !data.text || !mounted) return;
 
                 setMessages((prev) => {

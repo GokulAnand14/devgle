@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 
 const tips = [
@@ -16,7 +17,12 @@ interface SearchingAnimationProps {
 export default function SearchingAnimation({
     onCancel,
 }: SearchingAnimationProps) {
-    const tip = tips[Math.floor(Math.random() * tips.length)];
+    const [tip, setTip] = useState("");
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTip(tips[Math.floor(Math.random() * tips.length)]);
+    }, []);
 
     return (
         <div className="searching-screen" style={{ background: 'var(--bg-primary)', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>

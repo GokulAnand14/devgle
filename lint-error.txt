@@ -1,0 +1,19 @@
+
+> devgle-v2@0.1.0 lint
+> eslint
+
+
+D:\GOKUL\projects\devgle-v2\app\layout.tsx
+  38:9  warning  Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+D:\GOKUL\projects\devgle-v2\app\room\page.tsx
+    5:22  warning  'User' is defined but never used                                                                                                                            @typescript-eslint/no-unused-vars
+    6:21  warning  'getShortId' is defined but never used                                                                                                                      @typescript-eslint/no-unused-vars
+  139:8   warning  React Hook useEffect has missing dependencies: 'matchmaking.isInitiator', 'media.stream', and 'webrtc'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  149:8   warning  React Hook useEffect has missing dependencies: 'handleSkip' and 'roomState'. Either include them or remove the dependency array                             react-hooks/exhaustive-deps
+
+D:\GOKUL\projects\devgle-v2\hooks\useOnlineCount.ts
+  54:22  warning  The ref value 'peersRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'peersRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+
+✖ 6 problems (0 errors, 6 warnings)
+
