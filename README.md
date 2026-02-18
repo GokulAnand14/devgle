@@ -2,7 +2,7 @@
 
 > **"Where Developers Connect, Anonymous & Distraction-Free."**
 
-![Devgle Preview](public/preview.webp)
+![Devgle Preview](public/demo.png)
 
 ## 🌟 Introduction
 
