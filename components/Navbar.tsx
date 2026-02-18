@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X, Github } from "lucide-react";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,10 +24,19 @@ export default function Navbar() {
                 </div>
 
                 {/* Desktop CTA */}
-                <div className="navbar-cta desktop-only">
+                <div className="navbar-cta desktop-only" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                     <Link href="/room" className="btn btn-primary btn-sm" style={{ paddingRight: '20px' }}>
                         Launch App <ArrowRight size={16} style={{ marginLeft: 8 }} />
                     </Link>
+                    <a
+                        href="https://github.com/GokulAnand14/devgle"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--text-primary)', opacity: 0.8, transition: 'opacity 0.2s', display: 'flex' }}
+                        aria-label="View on GitHub"
+                    >
+                        <Github size={24} />
+                    </a>
                 </div>
 
                 {/* Mobile Menu Toggle */}

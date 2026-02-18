@@ -254,9 +254,16 @@ export default function ControlBar({
                     zIndex: 2000
                 }}>
                     {/* Menu Items */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
                         {ScreenBtn}
                         {ChatBtn}
+                        <button
+                            className={`btn btn-icon ${showSettings ? "active" : ""}`}
+                            onClick={() => setShowSettings(!showSettings)}
+                            aria-label="Settings"
+                        >
+                            <Settings size={24} />
+                        </button>
                     </div>
                 </div>
             )}
@@ -271,6 +278,19 @@ export default function ControlBar({
                     <>
                         {ScreenBtn}
                         {ChatBtn}
+
+                        <div style={{ position: 'relative' }}>
+                            <button
+                                className={`btn btn-icon ${showSettings ? "active" : ""}`}
+                                onClick={() => setShowSettings(!showSettings)}
+                                aria-label="Settings"
+                                data-tooltip="Device Settings"
+                            >
+                                <Settings size={24} />
+                            </button>
+                            {showSettings && <SettingsModal />}
+                        </div>
+
                         <div className="control-divider" />
                     </>
                 )}
