@@ -3,6 +3,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { getPeerId } from "@/lib/peer-id";
+import { TRYSTERO_CONFIG } from "@/lib/trystero-config";
 
 export type MatchState = "idle" | "searching" | "matched" | "error";
 
@@ -18,7 +19,6 @@ interface MatchmakingResult {
 
 // Shared lobby room name — all searching users join this room
 const LOBBY_ROOM = "devgle-lobby-v3";
-const APP_ID = "devgle-omegle-for-devs";
 
 export function useMatchmaking(): MatchmakingResult {
     const [matchState, setMatchState] = useState<MatchState>("idle");
@@ -61,7 +61,7 @@ export function useMatchmaking(): MatchmakingResult {
             // Dynamically import trystero (client-side only)
             const { joinRoom, selfId } = await import("trystero/nostr");
 
-            const room = joinRoom({ appId: APP_ID }, LOBBY_ROOM);
+            const room = joinRoom(TRYSTERO_CONFIG, LOBBY_ROOM);
             roomRef.current = room;
 
             console.log("[Devgle] Joined lobby, my trystero id:", selfId);

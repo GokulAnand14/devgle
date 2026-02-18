@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { TRYSTERO_CONFIG } from "@/lib/trystero-config";
 
 export type ConnectionState =
     | "idle"
@@ -13,8 +14,6 @@ interface WebRTCState {
     connectionState: ConnectionState;
     remoteStreams: MediaStream[];
 }
-
-const APP_ID = "devgle-omegle-for-devs";
 
 export function useWebRTC(localPeerId: string) {
     const [state, setState] = useState<WebRTCState>({
@@ -54,7 +53,7 @@ export function useWebRTC(localPeerId: string) {
             try {
                 const { joinRoom } = await import("trystero/nostr");
 
-                const room = joinRoom({ appId: APP_ID }, roomId);
+                const room = joinRoom(TRYSTERO_CONFIG, roomId);
                 roomRef.current = room;
 
                 // Send our media stream to the room
