@@ -102,15 +102,17 @@ export default function Home() {
             </a>
           </div>
 
-          <a href="https://www.producthunt.com/products/devgle?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-devgle" target="_blank" rel="noopener noreferrer">
-            <img
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1081840&theme=light&t=1771489482664"
-              alt="Devgle - Omegle for Developers | Product Hunt"
-              style={{ width: 250, height: 54 }}
-              width="250"
-              height="54"
-            />
-          </a>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <a href="https://www.producthunt.com/products/devgle?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-devgle" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1081840&theme=light&t=1771489482664"
+                alt="Devgle - Omegle for Developers | Product Hunt"
+                style={{ width: 250, height: 54 }}
+                width="250"
+                height="54"
+              />
+            </a>
+          </div>
         </div>
       </section>
 
