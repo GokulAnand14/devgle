@@ -93,7 +93,7 @@ export default function Home() {
             The anonymous video chat for builders. Get feedback, review code, or just chill with developers around the globe.
           </p>
 
-          <div className="hero-actions" style={{ gap: 24 }}>
+          <div className="hero-actions" style={{ gap: 24, marginBottom: 40 }}>
             <Link href="/room" className="btn btn-primary btn-lg" style={{ padding: '24px 48px', fontSize: '1.2rem' }}>
               CONNECT NOW <ArrowRight size={22} />
             </Link>
@@ -101,6 +101,16 @@ export default function Home() {
               SEE HOW <ChevronDown size={22} />
             </a>
           </div>
+
+          <a href="https://www.producthunt.com/products/devgle?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-devgle" target="_blank" rel="noopener noreferrer">
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1081840&theme=light&t=1771489482664"
+              alt="Devgle - Omegle for Developers | Product Hunt"
+              style={{ width: 250, height: 54 }}
+              width="250"
+              height="54"
+            />
+          </a>
         </div>
       </section>
 
